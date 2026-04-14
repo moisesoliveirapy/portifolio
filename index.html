@@ -7,6 +7,14 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <meta name="description" content="Desenvolvedor Full Stack especializado em criar sites, sistemas e soluções com IA que geram resultados reais para o seu negócio.">
   
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta name="theme-color" content="#0a0a0f">
+  
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -46,7 +54,6 @@
       box-sizing: border-box;
     }
 
-    
     html {
       scroll-behavior: smooth;
       scroll-padding-top: 80px;
@@ -1136,6 +1143,72 @@
     }
 
     /* ========================================
+       LANGUAGE TOGGLE
+       ======================================== */
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-right: 8px;
+    }
+
+    .lang-switch span {
+      font-family: var(--font-display);
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      transition: var(--transition);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lang-switch span.active {
+      color: var(--accent-light);
+    }
+
+    .lang-toggle-track {
+      width: 44px;
+      height: 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-hover);
+      border-radius: 50px;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition);
+      flex-shrink: 0;
+    }
+
+    .lang-toggle-track:hover {
+      border-color: var(--accent);
+    }
+
+    .lang-toggle-thumb {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 18px;
+      height: 18px;
+      background: var(--accent);
+      border-radius: 50%;
+      transition: var(--transition);
+      box-shadow: 0 2px 8px var(--accent-glow-strong);
+    }
+
+    .lang-toggle-track.en .lang-toggle-thumb {
+      left: calc(100% - 20px);
+    }
+
+    @media (max-width: 968px) {
+      .lang-switch {
+        position: absolute;
+        top: 50%;
+        right: 60px;
+        transform: translateY(-50%);
+      }
+    }
+
+    /* ========================================
        GRID BACKGROUND DECORATION
        ======================================== */
     .grid-bg {
@@ -1160,12 +1233,19 @@
     <div class="container">
       <a href="#" class="nav-logo">M<span>.</span>Oliveira</a>
       <ul class="nav-links" id="navLinks">
-        <li><a href="#sobre" onclick="closeMenu()">Sobre</a></li>
-        <li><a href="#projetos" onclick="closeMenu()">Projetos</a></li>
-        <li><a href="#servicos" onclick="closeMenu()">Serviços</a></li>
-        <li><a href="#diferenciais" onclick="closeMenu()">Diferenciais</a></li>
-        <li><a href="#contato" class="nav-cta" onclick="closeMenu()">Fale comigo</a></li>
+        <li><a href="#sobre" onclick="closeMenu()" data-i18n="nav_about">Sobre</a></li>
+        <li><a href="#projetos" onclick="closeMenu()" data-i18n="nav_projects">Projetos</a></li>
+        <li><a href="#servicos" onclick="closeMenu()" data-i18n="nav_services">Serviços</a></li>
+        <li><a href="#diferenciais" onclick="closeMenu()" data-i18n="nav_diff">Diferenciais</a></li>
+        <li><a href="#contato" class="nav-cta" onclick="closeMenu()" data-i18n="nav_contact">Fale comigo</a></li>
       </ul>
+      <div class="lang-switch">
+        <span class="active" id="langPT" onclick="setLang('pt')">PT</span>
+        <div class="lang-toggle-track" id="langTrack" onclick="toggleLang()">
+          <div class="lang-toggle-thumb"></div>
+        </div>
+        <span id="langEN" onclick="setLang('en')">EN</span>
+      </div>
       <button class="nav-toggle" id="navToggle" aria-label="Menu">
         <span></span><span></span><span></span>
       </button>
@@ -1181,36 +1261,36 @@
       <div class="hero-content">
         <div class="hero-badge">
           <span class="dot"></span>
-          Disponível para novos projetos
+          <span data-i18n="hero_badge">Disponível para novos projetos</span>
         </div>
-        <h1>
+        <h1 data-i18n="hero_title" data-i18n-html="true">
           Transformo suas ideias em <span class="gradient-text">soluções digitais</span> que geram resultados
         </h1>
-        <p class="hero-description">
+        <p class="hero-description" data-i18n="hero_desc">
           Desenvolvedor Full Stack especializado em criar sites, sistemas e soluções com inteligência artificial que fazem o seu negócio crescer de verdade.
         </p>
         <div class="hero-actions">
-          <a href="https://wa.me/5571983406902?text=Olá! Vi seu portfólio e gostaria de um orçamento." class="btn-primary" target="_blank">
+          <a href="https://wa.me/5571983406902?text=Olá! Vi seu portfólio e gostaria de um orçamento." class="btn-primary" target="_blank" id="heroCta">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.24 0-4.326-.724-6.022-1.95l-.422-.314-2.644.887.887-2.644-.314-.422A9.935 9.935 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-            Solicitar Orçamento
+            <span data-i18n="hero_cta">Solicitar Orçamento</span>
           </a>
           <a href="#projetos" class="btn-secondary">
-            Ver Projetos
+            <span data-i18n="hero_cta2">Ver Projetos</span>
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
           </a>
         </div>
         <div class="hero-stats">
           <div class="stat-item">
             <h3>5<span>+</span></h3>
-            <p>Tecnologias dominadas</p>
+            <p data-i18n="stat1">Tecnologias dominadas</p>
           </div>
           <div class="stat-item">
             <h3>100<span>%</span></h3>
-            <p>Comprometimento</p>
+            <p data-i18n="stat2">Comprometimento</p>
           </div>
           <div class="stat-item">
             <h3>24<span>h</span></h3>
-            <p>Tempo de resposta</p>
+            <p data-i18n="stat3">Tempo de resposta</p>
           </div>
         </div>
       </div>
@@ -1223,19 +1303,19 @@
   <section id="sobre">
     <div class="container">
       <div class="reveal">
-        <span class="section-label">Sobre mim</span>
-        <h2 class="section-title">Não sou só mais um dev.<br>Eu resolvo problemas reais.</h2>
+        <span class="section-label" data-i18n="about_label">Sobre mim</span>
+        <h2 class="section-title" data-i18n="about_title" data-i18n-html="true">Não sou só mais um dev.<br>Eu resolvo problemas reais.</h2>
       </div>
 
       <div class="about-grid">
         <div class="about-text reveal">
-          <p>
+          <p data-i18n="about_p1" data-i18n-html="true">
             Me chamo <strong>Moisés Oliveira</strong>, sou desenvolvedor de software com experiência em projetos que vão desde landing pages de alta conversão até sistemas completos com inteligência artificial integrada.
           </p>
-          <p>
+          <p data-i18n="about_p2" data-i18n-html="true">
             Meu foco não está apenas em escrever código bonito — está em <strong>entregar resultados mensuráveis</strong>. Cada projeto que construo é pensado para resolver um problema real do seu negócio, seja aumentar vendas, automatizar processos ou criar presença digital profissional.
           </p>
-          <p>
+          <p data-i18n="about_p3" data-i18n-html="true">
             Trabalho com as tecnologias mais demandadas do mercado, garantindo que sua solução seja <strong>escalável, segura e moderna</strong>.
           </p>
 
@@ -1270,23 +1350,23 @@
         <div class="about-highlights reveal">
           <div class="highlight-card">
             <div class="icon">🎯</div>
-            <h4>Foco em Resultados</h4>
-            <p>Cada linha de código é escrita pensando no impacto real para o seu negócio. Não entrego apenas software, entrego soluções.</p>
+            <h4 data-i18n="hl1_title">Foco em Resultados</h4>
+            <p data-i18n="hl1_desc">Cada linha de código é escrita pensando no impacto real para o seu negócio. Não entrego apenas software, entrego soluções.</p>
           </div>
           <div class="highlight-card">
             <div class="icon">⚡</div>
-            <h4>Entrega Ágil</h4>
-            <p>Processo organizado com comunicação constante. Você acompanha cada etapa do desenvolvimento do seu projeto.</p>
+            <h4 data-i18n="hl2_title">Entrega Ágil</h4>
+            <p data-i18n="hl2_desc">Processo organizado com comunicação constante. Você acompanha cada etapa do desenvolvimento do seu projeto.</p>
           </div>
           <div class="highlight-card">
             <div class="icon">🔒</div>
-            <h4>Código Seguro</h4>
-            <p>Aplico boas práticas de segurança e performance em todos os projetos, protegendo seus dados e seus clientes.</p>
+            <h4 data-i18n="hl3_title">Código Seguro</h4>
+            <p data-i18n="hl3_desc">Aplico boas práticas de segurança e performance em todos os projetos, protegendo seus dados e seus clientes.</p>
           </div>
           <div class="highlight-card">
             <div class="icon">🤝</div>
-            <h4>Suporte Contínuo</h4>
-            <p>Meu trabalho não termina na entrega. Ofereço suporte para garantir que tudo funcione perfeitamente.</p>
+            <h4 data-i18n="hl4_title">Suporte Contínuo</h4>
+            <p data-i18n="hl4_desc">Meu trabalho não termina na entrega. Ofereço suporte para garantir que tudo funcione perfeitamente.</p>
           </div>
         </div>
       </div>
@@ -1300,9 +1380,9 @@
     <div class="grid-bg"></div>
     <div class="container">
       <div class="reveal">
-        <span class="section-label">Portfólio</span>
-        <h2 class="section-title">Projetos que entregam valor</h2>
-        <p class="section-subtitle">Cada projeto foi construído para resolver um problema real. Confira alguns dos meus trabalhos.</p>
+        <span class="section-label" data-i18n="proj_label">Portfólio</span>
+        <h2 class="section-title" data-i18n="proj_title">Projetos que entregam valor</h2>
+        <p class="section-subtitle" data-i18n="proj_subtitle">Cada projeto foi construído para resolver um problema real. Confira alguns dos meus trabalhos.</p>
       </div>
 
       <div class="projects-grid">
@@ -1312,8 +1392,8 @@
             <span class="project-placeholder">📊</span>
           </div>
           <div class="project-info">
-            <h3>Sistema de Controle de Vendas</h3>
-            <p>Sistema web completo para gerenciamento de vendas com dashboards analíticos, gráficos interativos e controle de acesso por níveis (gerente e vendedor). Solução ideal para negócios que precisam de visibilidade total sobre suas operações comerciais.</p>
+            <h3 data-i18n="p1_title">Sistema de Controle de Vendas</h3>
+            <p data-i18n="p1_desc">Sistema web completo para gerenciamento de vendas com dashboards analíticos, gráficos interativos e controle de acesso por níveis (gerente e vendedor). Solução ideal para negócios que precisam de visibilidade total sobre suas operações comerciais.</p>
             <div class="project-techs">
               <span class="tech-badge">PHP</span>
               <span class="tech-badge">JavaScript</span>
@@ -1323,11 +1403,11 @@
             <div class="project-links">
               <a href="https://si-stema-de-controle-web.vercel.app" class="project-link live" target="_blank">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-                Ver Projeto
+                <span data-i18n="btn_live">Ver Projeto</span>
               </a>
               <a href="https://github.com/moisessouzapy/SIstema-de-controle-web" class="project-link repo" target="_blank">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0112 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
-                Repositório
+                <span data-i18n="btn_repo">Repositório</span>
               </a>
             </div>
           </div>
@@ -1339,8 +1419,8 @@
             <span class="project-placeholder">🔧</span>
           </div>
           <div class="project-info">
-            <h3>Sistema de Gestão para Oficina</h3>
-            <p>Aplicação desktop para gerenciamento completo de oficinas mecânicas: cadastro de clientes, funcionários, orçamentos e ordens de serviço com banco de dados relacional e controle de acesso por perfil.</p>
+            <h3 data-i18n="p2_title">Sistema de Gestão para Oficina</h3>
+            <p data-i18n="p2_desc">Aplicação desktop para gerenciamento completo de oficinas mecânicas: cadastro de clientes, funcionários, orçamentos e ordens de serviço com banco de dados relacional e controle de acesso por perfil.</p>
             <div class="project-techs">
               <span class="tech-badge">Java</span>
               <span class="tech-badge">SQLite</span>
@@ -1362,8 +1442,8 @@
             <span class="project-placeholder">🎬</span>
           </div>
           <div class="project-info">
-            <h3>CineTag — Plataforma de Filmes</h3>
-            <p>Plataforma web de compartilhamento e descoberta de filmes construída com React. Conta com rotas dinâmicas, gerenciamento de estado com Context API e consumo de API externa para catálogo atualizado.</p>
+            <h3 data-i18n="p3_title">CineTag — Plataforma de Filmes</h3>
+            <p data-i18n="p3_desc">Plataforma web de compartilhamento e descoberta de filmes construída com React. Conta com rotas dinâmicas, gerenciamento de estado com Context API e consumo de API externa para catálogo atualizado.</p>
             <div class="project-techs">
               <span class="tech-badge">React</span>
               <span class="tech-badge">JavaScript</span>
@@ -1388,34 +1468,34 @@
   <section id="servicos">
     <div class="container">
       <div class="reveal">
-        <span class="section-label">Serviços</span>
-        <h2 class="section-title">O que posso fazer pelo seu negócio</h2>
-        <p class="section-subtitle">Soluções sob medida que geram retorno real sobre o investimento.</p>
+        <span class="section-label" data-i18n="serv_label">Serviços</span>
+        <h2 class="section-title" data-i18n="serv_title">O que posso fazer pelo seu negócio</h2>
+        <p class="section-subtitle" data-i18n="serv_subtitle">Soluções sob medida que geram retorno real sobre o investimento.</p>
       </div>
 
       <div class="services-grid">
         <div class="service-card reveal">
           <div class="service-icon">🖥️</div>
-          <h3>Criação de Sites</h3>
-          <p>Sites institucionais modernos, rápidos e otimizados para SEO. Presença digital profissional que transmite credibilidade e atrai clientes.</p>
+          <h3 data-i18n="s1_title">Criação de Sites</h3>
+          <p data-i18n="s1_desc">Sites institucionais modernos, rápidos e otimizados para SEO. Presença digital profissional que transmite credibilidade e atrai clientes.</p>
         </div>
 
         <div class="service-card reveal">
           <div class="service-icon">🚀</div>
-          <h3>Landing Pages</h3>
-          <p>Páginas de alta conversão focadas em transformar visitantes em leads e clientes. Design persuasivo com copywriting estratégico.</p>
+          <h3 data-i18n="s2_title">Landing Pages</h3>
+          <p data-i18n="s2_desc">Páginas de alta conversão focadas em transformar visitantes em leads e clientes. Design persuasivo com copywriting estratégico.</p>
         </div>
 
         <div class="service-card reveal">
           <div class="service-icon">⚙️</div>
-          <h3>Sistemas Personalizados</h3>
-          <p>Sistemas web sob medida para automatizar processos, gerenciar dados e escalar operações do seu negócio com eficiência.</p>
+          <h3 data-i18n="s3_title">Sistemas Personalizados</h3>
+          <p data-i18n="s3_desc">Sistemas web sob medida para automatizar processos, gerenciar dados e escalar operações do seu negócio com eficiência.</p>
         </div>
 
         <div class="service-card reveal">
           <div class="service-icon">🧠</div>
-          <h3>Soluções com IA</h3>
-          <p>Chatbots inteligentes, automações e integrações com inteligência artificial para otimizar atendimento e processos internos.</p>
+          <h3 data-i18n="s4_title">Soluções com IA</h3>
+          <p data-i18n="s4_desc">Chatbots inteligentes, automações e integrações com inteligência artificial para otimizar atendimento e processos internos.</p>
         </div>
       </div>
     </div>
@@ -1428,34 +1508,34 @@
     <div class="grid-bg"></div>
     <div class="container">
       <div class="reveal" style="text-align: center;">
-        <span class="section-label" style="justify-content: center;">Diferenciais</span>
-        <h2 class="section-title">Por que me escolher?</h2>
-        <p class="section-subtitle" style="margin: 0 auto;">Não é só sobre código. É sobre entregar valor real em cada etapa.</p>
+        <span class="section-label" style="justify-content: center;" data-i18n="diff_label">Diferenciais</span>
+        <h2 class="section-title" data-i18n="diff_title">Por que me escolher?</h2>
+        <p class="section-subtitle" style="margin: 0 auto;" data-i18n="diff_subtitle">Não é só sobre código. É sobre entregar valor real em cada etapa.</p>
       </div>
 
       <div class="diff-grid">
         <div class="diff-item reveal">
           <div class="diff-icon">⚡</div>
-          <h4>Sites Ultra-Rápidos</h4>
-          <p>Performance otimizada com carregamento instantâneo para não perder nenhum visitante.</p>
+          <h4 data-i18n="d1_title">Sites Ultra-Rápidos</h4>
+          <p data-i18n="d1_desc">Performance otimizada com carregamento instantâneo para não perder nenhum visitante.</p>
         </div>
 
         <div class="diff-item reveal">
           <div class="diff-icon">🎨</div>
-          <h4>Design Premium</h4>
-          <p>Interfaces modernas e profissionais que transmitem autoridade e confiança.</p>
+          <h4 data-i18n="d2_title">Design Premium</h4>
+          <p data-i18n="d2_desc">Interfaces modernas e profissionais que transmitem autoridade e confiança.</p>
         </div>
 
         <div class="diff-item reveal">
           <div class="diff-icon">📈</div>
-          <h4>Foco em Resultado</h4>
-          <p>Cada decisão técnica é pensada para maximizar a conversão e o retorno do seu investimento.</p>
+          <h4 data-i18n="d3_title">Foco em Resultado</h4>
+          <p data-i18n="d3_desc">Cada decisão técnica é pensada para maximizar a conversão e o retorno do seu investimento.</p>
         </div>
 
         <div class="diff-item reveal">
           <div class="diff-icon">💬</div>
-          <h4>Suporte Dedicado</h4>
-          <p>Comunicação direta, transparente e ágil durante todo o projeto e após a entrega.</p>
+          <h4 data-i18n="d4_title">Suporte Dedicado</h4>
+          <p data-i18n="d4_desc">Comunicação direta, transparente e ágil durante todo o projeto e após a entrega.</p>
         </div>
       </div>
     </div>
@@ -1467,23 +1547,21 @@
   <section id="prova-social">
     <div class="container">
       <div class="reveal" style="text-align: center;">
-        <span class="section-label" style="justify-content: center;">Resultados</span>
-        <h2 class="section-title">Números que comprovam</h2>
+        <span class="section-label" style="justify-content: center;" data-i18n="proof_label">Resultados</span>
+        <h2 class="section-title" data-i18n="proof_title">Números que comprovam</h2>
       </div>
 
       <div class="proof-content reveal">
-        <div class="proof-quote">
-          Meu compromisso é entregar soluções que realmente funcionam. Cada projeto é tratado como se fosse o meu próprio negócio.
-        </div>
+        <div class="proof-quote" data-i18n="proof_quote">Meu compromisso é entregar soluções que realmente funcionam. Cada projeto é tratado como se fosse o meu próprio negócio.</div>
 
         <div class="proof-metrics">
           <div class="metric">
             <h3>100%</h3>
-            <p>Projetos entregues no prazo</p>
+            <p data-i18n="m1">Projetos entregues no prazo</p>
           </div>
           <div class="metric">
             <h3>5+</h3>
-            <p>Tecnologias no stack</p>
+            <p data-i18n="m2">Tecnologias no stack</p>
           </div>
           <div class="metric">
             <h3>∞</h3>
@@ -1500,17 +1578,17 @@
   <section class="cta-section" id="contato">
     <div class="container">
       <div class="cta-box reveal">
-        <span class="section-label" style="justify-content: center;">Vamos conversar</span>
-        <h2>Pronto para transformar sua ideia em realidade?</h2>
-        <p>Entre em contato agora e receba um orçamento personalizado em até 24 horas. Sem compromisso, sem enrolação.</p>
+        <span class="section-label" style="justify-content: center;" data-i18n="cta_label">Vamos conversar</span>
+        <h2 data-i18n="cta_title">Pronto para transformar sua ideia em realidade?</h2>
+        <p data-i18n="cta_desc">Entre em contato agora e receba um orçamento personalizado em até 24 horas. Sem compromisso, sem enrolação.</p>
         <div class="cta-actions">
           <a href="https://wa.me/5571983406902?text=Olá Moisés! Vi seu portfólio e gostaria de um orçamento." class="btn-whatsapp" target="_blank">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.625.846 5.059 2.284 7.034L.789 23.492a.5.5 0 00.61.609l4.458-1.495A11.952 11.952 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-2.24 0-4.326-.724-6.022-1.95l-.422-.314-2.644.887.887-2.644-.314-.422A9.935 9.935 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
-            Chamar no WhatsApp
+            <span data-i18n="cta_whatsapp">Chamar no WhatsApp</span>
           </a>
           <a href="mailto:moisessouza0204@gmail.com" class="btn-secondary">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Enviar Email
+            <span data-i18n="cta_email">Enviar Email</span>
           </a>
         </div>
       </div>
@@ -1523,7 +1601,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-left">
-        <p>&copy; 2026 Moisés Oliveira. Todos os direitos reservados.</p>
+        <p data-i18n="footer_copy">&copy; 2026 Moisés Oliveira. Todos os direitos reservados.</p>
       </div>
       <div class="footer-links">
         <a href="https://github.com/moisesoliveirapy" target="_blank">GitHub</a>
@@ -1544,13 +1622,262 @@
        JAVASCRIPT
        ======================================== -->
   <script>
-    // --- Navbar scroll effect ---
+    // ========================================
+    // INTERNATIONALIZATION (i18n) SYSTEM
+    // ========================================
+    const translations = {
+      pt: {
+        // Nav
+        nav_about: 'Sobre',
+        nav_projects: 'Projetos',
+        nav_services: 'Serviços',
+        nav_diff: 'Diferenciais',
+        nav_contact: 'Fale comigo',
+        // Hero
+        hero_badge: 'Disponível para novos projetos',
+        hero_title: 'Transformo suas ideias em <span class="gradient-text">soluções digitais</span> que geram resultados',
+        hero_desc: 'Desenvolvedor Full Stack especializado em criar sites, sistemas e soluções com inteligência artificial que fazem o seu negócio crescer de verdade.',
+        hero_cta: 'Solicitar Orçamento',
+        hero_cta2: 'Ver Projetos',
+        stat1: 'Tecnologias dominadas',
+        stat2: 'Comprometimento',
+        stat3: 'Tempo de resposta',
+        // About
+        about_label: 'Sobre mim',
+        about_title: 'Não sou só mais um dev.<br>Eu resolvo problemas reais.',
+        about_p1: 'Me chamo <strong>Moisés Oliveira</strong>, sou desenvolvedor de software com experiência em projetos que vão desde landing pages de alta conversão até sistemas completos com inteligência artificial integrada.',
+        about_p2: 'Meu foco não está apenas em escrever código bonito — está em <strong>entregar resultados mensuráveis</strong>. Cada projeto que construo é pensado para resolver um problema real do seu negócio, seja aumentar vendas, automatizar processos ou criar presença digital profissional.',
+        about_p3: 'Trabalho com as tecnologias mais demandadas do mercado, garantindo que sua solução seja <strong>escalável, segura e moderna</strong>.',
+        hl1_title: 'Foco em Resultados',
+        hl1_desc: 'Cada linha de código é escrita pensando no impacto real para o seu negócio. Não entrego apenas software, entrego soluções.',
+        hl2_title: 'Entrega Ágil',
+        hl2_desc: 'Processo organizado com comunicação constante. Você acompanha cada etapa do desenvolvimento do seu projeto.',
+        hl3_title: 'Código Seguro',
+        hl3_desc: 'Aplico boas práticas de segurança e performance em todos os projetos, protegendo seus dados e seus clientes.',
+        hl4_title: 'Suporte Contínuo',
+        hl4_desc: 'Meu trabalho não termina na entrega. Ofereço suporte para garantir que tudo funcione perfeitamente.',
+        // Projects
+        proj_label: 'Portfólio',
+        proj_title: 'Projetos que entregam valor',
+        proj_subtitle: 'Cada projeto foi construído para resolver um problema real. Confira alguns dos meus trabalhos.',
+        p1_title: 'Sistema de Controle de Vendas',
+        p1_desc: 'Sistema web completo para gerenciamento de vendas com dashboards analíticos, gráficos interativos e controle de acesso por níveis (gerente e vendedor). Solução ideal para negócios que precisam de visibilidade total sobre suas operações comerciais.',
+        p2_title: 'Sistema de Gestão para Oficina',
+        p2_desc: 'Aplicação desktop para gerenciamento completo de oficinas mecânicas: cadastro de clientes, funcionários, orçamentos e ordens de serviço com banco de dados relacional e controle de acesso por perfil.',
+        p3_title: 'CineTag — Plataforma de Filmes',
+        p3_desc: 'Plataforma web de compartilhamento e descoberta de filmes construída com React. Conta com rotas dinâmicas, gerenciamento de estado com Context API e consumo de API externa para catálogo atualizado.',
+        btn_live: 'Ver Projeto',
+        btn_repo: 'Repositório',
+        // Services
+        serv_label: 'Serviços',
+        serv_title: 'O que posso fazer pelo seu negócio',
+        serv_subtitle: 'Soluções sob medida que geram retorno real sobre o investimento.',
+        s1_title: 'Criação de Sites',
+        s1_desc: 'Sites institucionais modernos, rápidos e otimizados para SEO. Presença digital profissional que transmite credibilidade e atrai clientes.',
+        s2_title: 'Landing Pages',
+        s2_desc: 'Páginas de alta conversão focadas em transformar visitantes em leads e clientes. Design persuasivo com copywriting estratégico.',
+        s3_title: 'Sistemas Personalizados',
+        s3_desc: 'Sistemas web sob medida para automatizar processos, gerenciar dados e escalar operações do seu negócio com eficiência.',
+        s4_title: 'Soluções com IA',
+        s4_desc: 'Chatbots inteligentes, automações e integrações com inteligência artificial para otimizar atendimento e processos internos.',
+        // Differentials
+        diff_label: 'Diferenciais',
+        diff_title: 'Por que me escolher?',
+        diff_subtitle: 'Não é só sobre código. É sobre entregar valor real em cada etapa.',
+        d1_title: 'Sites Ultra-Rápidos',
+        d1_desc: 'Performance otimizada com carregamento instantâneo para não perder nenhum visitante.',
+        d2_title: 'Design Premium',
+        d2_desc: 'Interfaces modernas e profissionais que transmitem autoridade e confiança.',
+        d3_title: 'Foco em Resultado',
+        d3_desc: 'Cada decisão técnica é pensada para maximizar a conversão e o retorno do seu investimento.',
+        d4_title: 'Suporte Dedicado',
+        d4_desc: 'Comunicação direta, transparente e ágil durante todo o projeto e após a entrega.',
+        // Proof
+        proof_label: 'Resultados',
+        proof_title: 'Números que comprovam',
+        proof_quote: 'Meu compromisso é entregar soluções que realmente funcionam. Cada projeto é tratado como se fosse o meu próprio negócio.',
+        m1: 'Projetos entregues no prazo',
+        m2: 'Tecnologias no stack',
+        m3: 'Comprometimento',
+        // CTA
+        cta_label: 'Vamos conversar',
+        cta_title: 'Pronto para transformar sua ideia em realidade?',
+        cta_desc: 'Entre em contato agora e receba um orçamento personalizado em até 24 horas. Sem compromisso, sem enrolação.',
+        cta_whatsapp: 'Chamar no WhatsApp',
+        cta_email: 'Enviar Email',
+        // Footer
+        footer_copy: '&copy; 2026 Moisés Oliveira. Todos os direitos reservados.'
+      },
+      en: {
+        // Nav
+        nav_about: 'About',
+        nav_projects: 'Projects',
+        nav_services: 'Services',
+        nav_diff: 'Why Me',
+        nav_contact: 'Get in Touch',
+        // Hero
+        hero_badge: 'Available for new projects',
+        hero_title: 'I turn your ideas into <span class="gradient-text">digital solutions</span> that drive results',
+        hero_desc: 'Full Stack Developer specialized in building websites, systems, and AI-powered solutions that make your business grow for real.',
+        hero_cta: 'Request a Quote',
+        hero_cta2: 'View Projects',
+        stat1: 'Technologies mastered',
+        stat2: 'Commitment',
+        stat3: 'Response time',
+        // About
+        about_label: 'About me',
+        about_title: "I'm not just another dev.<br>I solve real problems.",
+        about_p1: "My name is <strong>Moisés Oliveira</strong>, I'm a software developer experienced in projects ranging from high-conversion landing pages to complete systems with integrated artificial intelligence.",
+        about_p2: "My focus isn't just on writing clean code — it's on <strong>delivering measurable results</strong>. Every project I build is designed to solve a real problem in your business, whether it's increasing sales, automating processes, or building a professional digital presence.",
+        about_p3: 'I work with the most in-demand technologies on the market, ensuring your solution is <strong>scalable, secure, and modern</strong>.',
+        hl1_title: 'Results-Driven',
+        hl1_desc: "Every line of code is written with real impact on your business in mind. I don't just deliver software, I deliver solutions.",
+        hl2_title: 'Agile Delivery',
+        hl2_desc: 'Organized process with constant communication. You follow every step of your project development.',
+        hl3_title: 'Secure Code',
+        hl3_desc: 'I apply security and performance best practices in every project, protecting your data and your customers.',
+        hl4_title: 'Ongoing Support',
+        hl4_desc: "My work doesn't end at delivery. I provide support to ensure everything works perfectly.",
+        // Projects
+        proj_label: 'Portfolio',
+        proj_title: 'Projects that deliver value',
+        proj_subtitle: 'Each project was built to solve a real problem. Check out some of my work.',
+        p1_title: 'Sales Control System',
+        p1_desc: 'Complete web system for sales management with analytical dashboards, interactive charts, and role-based access control (manager and salesperson). Ideal solution for businesses that need full visibility over their commercial operations.',
+        p2_title: 'Auto Shop Management System',
+        p2_desc: 'Desktop application for complete auto shop management: customer, employee, quote, and work order registration with relational database and role-based access control.',
+        p3_title: 'CineTag — Movie Platform',
+        p3_desc: 'Movie sharing and discovery web platform built with React. Features dynamic routing, state management with Context API, and external API consumption for an updated catalog.',
+        btn_live: 'Live Demo',
+        btn_repo: 'Repository',
+        // Services
+        serv_label: 'Services',
+        serv_title: 'What I can do for your business',
+        serv_subtitle: 'Tailored solutions that generate real return on investment.',
+        s1_title: 'Website Development',
+        s1_desc: 'Modern, fast, and SEO-optimized institutional websites. Professional digital presence that conveys credibility and attracts clients.',
+        s2_title: 'Landing Pages',
+        s2_desc: 'High-conversion pages focused on turning visitors into leads and customers. Persuasive design with strategic copywriting.',
+        s3_title: 'Custom Systems',
+        s3_desc: 'Tailor-made web systems to automate processes, manage data, and scale your business operations efficiently.',
+        s4_title: 'AI Solutions',
+        s4_desc: 'Smart chatbots, automations, and AI integrations to optimize customer service and internal processes.',
+        // Differentials
+        diff_label: 'Why Me',
+        diff_title: 'Why choose me?',
+        diff_subtitle: "It's not just about code. It's about delivering real value at every step.",
+        d1_title: 'Ultra-Fast Websites',
+        d1_desc: 'Optimized performance with instant loading so you never lose a visitor.',
+        d2_title: 'Premium Design',
+        d2_desc: 'Modern, professional interfaces that convey authority and trust.',
+        d3_title: 'Results-Focused',
+        d3_desc: 'Every technical decision is made to maximize conversion and your return on investment.',
+        d4_title: 'Dedicated Support',
+        d4_desc: 'Direct, transparent, and fast communication throughout the project and after delivery.',
+        // Proof
+        proof_label: 'Results',
+        proof_title: 'Numbers that prove it',
+        proof_quote: 'My commitment is to deliver solutions that truly work. Every project is treated as if it were my own business.',
+        m1: 'Projects delivered on time',
+        m2: 'Technologies in the stack',
+        m3: 'Commitment',
+        // CTA
+        cta_label: "Let's talk",
+        cta_title: 'Ready to turn your idea into reality?',
+        cta_desc: 'Get in touch now and receive a personalized quote within 24 hours. No strings attached.',
+        cta_whatsapp: 'Chat on WhatsApp',
+        cta_email: 'Send Email',
+        // Footer
+        footer_copy: '&copy; 2026 Moisés Oliveira. All rights reserved.'
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'pt';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      localStorage.setItem('lang', lang);
+      document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+
+      // Update toggle UI
+      const track = document.getElementById('langTrack');
+      const ptLabel = document.getElementById('langPT');
+      const enLabel = document.getElementById('langEN');
+      
+      if (lang === 'en') {
+        track.classList.add('en');
+        ptLabel.classList.remove('active');
+        enLabel.classList.add('active');
+      } else {
+        track.classList.remove('en');
+        ptLabel.classList.add('active');
+        enLabel.classList.remove('active');
+      }
+
+      // Update page title
+      document.title = lang === 'pt' 
+        ? 'Moisés Oliveira — Desenvolvedor de Software'
+        : 'Moisés Oliveira — Software Developer';
+
+      // Update all elements with data-i18n
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        const text = translations[lang][key];
+        if (text) {
+          if (el.hasAttribute('data-i18n-html')) {
+            el.innerHTML = text;
+          } else {
+            el.textContent = text;
+          }
+        }
+      });
+
+      // Update WhatsApp links text
+      const waMsg = lang === 'pt' 
+        ? 'Olá! Vi seu portfólio e gostaria de um orçamento.'
+        : 'Hi! I saw your portfolio and would like a quote.';
+      const waCtaMsg = lang === 'pt'
+        ? 'Olá Moisés! Vi seu portfólio e gostaria de um orçamento.'
+        : 'Hi Moisés! I saw your portfolio and would like a quote.';
+      
+      const heroCta = document.getElementById('heroCta');
+      if (heroCta) heroCta.href = `https://wa.me/5571983406902?text=${encodeURIComponent(waMsg)}`;
+
+      // Update CTA WhatsApp link
+      const ctaWa = document.querySelector('.cta-actions .btn-whatsapp');
+      if (ctaWa) ctaWa.href = `https://wa.me/5571983406902?text=${encodeURIComponent(waCtaMsg)}`;
+
+      // Update floating WhatsApp
+      const floatWa = document.querySelector('.whatsapp-float');
+      if (floatWa) {
+        const floatMsg = lang === 'pt'
+          ? 'Olá! Vi seu portfólio e gostaria de conversar.'
+          : 'Hi! I saw your portfolio and would like to chat.';
+        floatWa.href = `https://wa.me/5571983406902?text=${encodeURIComponent(floatMsg)}`;
+      }
+    }
+
+    function setLang(lang) {
+      applyLang(lang);
+    }
+
+    function toggleLang() {
+      applyLang(currentLang === 'pt' ? 'en' : 'pt');
+    }
+
+    // Apply saved language on load
+    document.addEventListener('DOMContentLoaded', () => {
+      applyLang(currentLang);
+    });
+
+    // ========================================
+    // NAVBAR & MENU
+    // ========================================
     const navbar = document.getElementById('navbar');
     window.addEventListener('scroll', () => {
       navbar.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // --- Mobile menu toggle ---
     const navToggle = document.getElementById('navToggle');
     const navLinks = document.getElementById('navLinks');
 
@@ -1564,13 +1891,14 @@
       navLinks.classList.remove('active');
     }
 
-    // --- Scroll reveal animation ---
+    // ========================================
+    // SCROLL REVEAL
+    // ========================================
     const revealElements = document.querySelectorAll('.reveal');
 
     const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry, index) => {
         if (entry.isIntersecting) {
-          // Stagger the animation
           setTimeout(() => {
             entry.target.classList.add('visible');
           }, index * 80);
@@ -1584,7 +1912,9 @@
 
     revealElements.forEach(el => revealObserver.observe(el));
 
-    // --- Smooth scroll for anchor links ---
+    // ========================================
+    // SMOOTH SCROLL
+    // ========================================
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       anchor.addEventListener('click', function(e) {
         e.preventDefault();
